@@ -27,6 +27,10 @@ const props = defineProps({
     icon: {
         type: String,
         required: true
+    },
+    readonly: {
+        type: Boolean,
+        default: false
     }
 });
 </script>
@@ -47,6 +51,7 @@ const props = defineProps({
                     class="input input-bordered w-full pr-10 dark:text-white" 
                     :type="props.type" 
                     :placeholder="props.placeholder" 
+                    :readonly="props.readonly"
                     v-bind="field"
                     :class="{
                         'error': !meta.valid && meta.touched

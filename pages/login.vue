@@ -13,6 +13,8 @@ configure({
     validateOnInput: false,
 });
 
+const loading = ref(false)
+
 const alertStore = useAlertStore()
 
 const initialValues = { username: "", password: "" }
@@ -33,8 +35,36 @@ const togglePassword = () => {
 const memoType = computed(() => isSecret.value ? 'password' : 'text')
 const memoIcon = computed(() => isSecret.value ? 'mdi:eye' : 'mdi:eye-off')
 
-const onSubmit = (values) => {
-    console.info(values)
+const onSubmit = async (values, actions) => {
+    loading.value = true
+    
+    const { data, error, pending } = await useFetch('/api/login', {
+        method: 'POST',
+        body: values
+    })
+
+    loading.value = pending.value
+
+    const statusCode = error.value.statusCode
+
+    if(statusCode === 422) {
+        const { data } = error.value.data
+
+        const json = JSON.parse(data);
+        const field = Object.keys(json)
+
+        actions.setFieldError(field[0], json[field[0]].message)
+    }
+
+    if(statusCode === 500) {
+        const alert = {
+            show: true,
+            type: 'error',
+            text: error.value.statusMessage
+        }
+
+        alertStore.showAlert(alert)
+    }
 }
 </script>
 
@@ -46,9 +76,9 @@ const onSubmit = (values) => {
             </template>
             <template #box-body>
                 <VForm :initial-values="initialValues" :validation-schema="validationSchema" v-slot="{ meta: formMeta }" @submit="onSubmit">
-                  <InputDefault name="username" label="Username" placeholder="Username..." />
-                  <InputAppend name="password" label="Password" placeholder="Password" :type="memoType" :icon="memoIcon" @click-append="togglePassword" />
-                  <ButtonDefault type="submit">
+                  <InputDefault name="username" label="Username" placeholder="Username..." :readonly="loading" />
+                  <InputAppend name="password" label="Password" placeholder="Password" :readonly="loading" :type="memoType" :icon="memoIcon" @click-append="togglePassword" />
+                  <ButtonDefault type="submit" :waiting="loading">
                     <template #default>
                         Sign In
                     </template>
@@ -59,7 +89,7 @@ const onSubmit = (values) => {
         <Teleport to="body">
             <AlertDefault v-if="alertStore.getAlert.show">
                 <template #default>
-                    ini alert message
+                    {{ alertStore.getAlert.text }}
                 </template>
             </AlertDefault>
         </Teleport>

@@ -16,6 +16,10 @@ const props = defineProps({
         type: String,
         required: true
     },
+    readonly: {
+        type: Boolean,
+        default: false
+    }
 });
 </script>
 
@@ -35,6 +39,7 @@ const props = defineProps({
                 autocomplete="off"
                 :type="props.type" 
                 :placeholder="props.placeholder" 
+                :readonly="props.readonly"
                 v-bind="field"
                 :class="{
                     'error': !meta.valid && meta.touched
