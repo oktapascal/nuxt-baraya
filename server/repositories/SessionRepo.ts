@@ -23,13 +23,18 @@ export async function getSessionByAuthToken(authToken: string) {
 }
 
 export async function getUserByAuthToken(authToken: string) {
-  return prisma.session
-    .findUnique({
-      where: {
-        authToken: authToken,
+  return prisma.session.findUnique({
+    where: {
+      authToken: authToken,
+    },
+    include: {
+      user: {
+        include: {
+          karyawan: true,
+        },
       },
-    })
-    .user();
+    },
+  });
 }
 
 export async function deleteSessionByAuthToken(authToken: string) {
