@@ -1,7 +1,5 @@
 /** @format */
 
-import { use } from 'h3';
-
 export const useCookieAuth = () => useCookie('access-token');
 
 export async function useUser() {

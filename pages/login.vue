@@ -4,7 +4,8 @@ import { toFormValidator } from '@vee-validate/zod'
 import * as zod from 'zod'
 
 definePageMeta({
-    layout: 'default'
+    layout: 'default',
+    middleware: 'guest'
 })
 
 useHead({
