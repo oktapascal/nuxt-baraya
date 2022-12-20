@@ -1,3 +1,5 @@
+/** @format */
+
 import { H3Event } from 'h3';
 import { ZodError } from 'zod';
 import sendZodErrorResponse from '~/utils/responses/zodErrors';
@@ -17,13 +19,15 @@ export async function loginController(event: H3Event) {
     }
 
     setCookie(event, 'access-token', services.accessToken!, {
-      httpOnly: true,
       maxAge: 8 * 60 * 60, // 8 jam
+      sameSite: true,
+      httpOnly: true,
     });
 
     setCookie(event, 'refresh-token', services.refreshToken!, {
-      httpOnly: true,
       maxAge: 24 * 60 * 60, // 24 jam
+      sameSite: true,
+      httpOnly: true,
     });
 
     return services;

@@ -3,6 +3,11 @@ import { configure } from 'vee-validate'
 import { toFormValidator } from '@vee-validate/zod'
 import * as zod from 'zod'
 
+definePageMeta({
+    layout: 'default',
+    middleware: 'auth'
+})
+
 useHead({
     title: 'Sign In Page'
 });
@@ -38,14 +43,18 @@ const memoIcon = computed(() => isSecret.value ? 'mdi:eye' : 'mdi:eye-off')
 const onSubmit = async (values, actions) => {
     loading.value = true
     
-    const { data, error, pending } = await useFetch('/api/login', {
+    const { error, pending } = await useFetch('/api/login', {
         method: 'POST',
         body: values
     })
 
     loading.value = pending.value
 
-    const statusCode = error.value.statusCode
+    let statusCode;
+
+    if(error.value !== null) {
+        statusCode = error.value.statusCode
+    }
 
     if(statusCode === 422) {
         const { data } = error.value.data

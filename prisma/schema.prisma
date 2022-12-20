@@ -25,4 +25,15 @@ model user {
   username String    @unique(map: "User_username_key")
   password String
   karyawan karyawan?
+  session  session[]
+}
+
+model session {
+  id        Int       @id @default(autoincrement())
+  authToken String    @unique
+  id_user   Int
+  user      user      @relation(fields: [id_user], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 }

@@ -1,9 +1,13 @@
+/** @format */
+
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { LoginRequest } from '~/types/request/login';
 import { IUser } from '~/types/data/IUser';
+import { ISession } from '~/types/data/ISession';
 import { validate } from '~/utils/request/login/validator';
 import { showUserRepo } from '~/server/repositories/UserRepo';
+import { createSession } from '~/server/repositories/SessionRepo';
 
 export async function loginService(data: LoginRequest) {
   const errors = await validate(data);
@@ -32,6 +36,13 @@ export async function loginService(data: LoginRequest) {
 
   const accessToken = generateAccessToken(user);
   const refreshToken = generateRefreshToken(user);
+
+  const dataSession: ISession = {
+    authToken: accessToken,
+    id_user: userData?.id!,
+  };
+
+  await createSession(dataSession);
 
   return { hasErrors: false, accessToken, refreshToken };
 }
