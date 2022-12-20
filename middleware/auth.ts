@@ -1,12 +1,11 @@
-export default defineNuxtRouteMiddleware((to, from) => {
-    const accessTokenCookie = useCookie('access-token')
-    const refreshTokenCookie = useCookie('refresh-token')
+/** @format */
 
-    if(typeof accessTokenCookie.value === 'undefined') {
-        return navigateTo('/login')
-    }
+import { useUser } from '~/composables/useAuth';
 
-    if(typeof refreshTokenCookie.value === 'undefined') {
-        return navigateTo('/login')
-    }
+export default defineNuxtRouteMiddleware(async (to, from) => {
+  const user = await useUser();
+
+  if (user === null || user === undefined) {
+    return navigateTo('/login');
+  }
 });

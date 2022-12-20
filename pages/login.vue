@@ -4,8 +4,7 @@ import { toFormValidator } from '@vee-validate/zod'
 import * as zod from 'zod'
 
 definePageMeta({
-    layout: 'default',
-    middleware: 'auth'
+    layout: 'default'
 })
 
 useHead({
@@ -42,7 +41,7 @@ const memoIcon = computed(() => isSecret.value ? 'mdi:eye' : 'mdi:eye-off')
 
 const onSubmit = async (values, actions) => {
     loading.value = true
-    
+
     const { error, pending } = await useFetch('/api/login', {
         method: 'POST',
         body: values
@@ -52,11 +51,11 @@ const onSubmit = async (values, actions) => {
 
     let statusCode;
 
-    if(error.value !== null) {
+    if (error.value !== null) {
         statusCode = error.value.statusCode
     }
 
-    if(statusCode === 422) {
+    if (statusCode === 422) {
         const { data } = error.value.data
 
         const json = JSON.parse(data);
@@ -65,7 +64,7 @@ const onSubmit = async (values, actions) => {
         actions.setFieldError(field[0], json[field[0]].message)
     }
 
-    if(statusCode === 500) {
+    if (statusCode === 500) {
         const alert = {
             show: true,
             type: 'error',
@@ -84,14 +83,16 @@ const onSubmit = async (values, actions) => {
                 <img alt="logo" src="/images/logo.jpeg" class="h-16 lg:h-20" />
             </template>
             <template #box-body>
-                <VForm :initial-values="initialValues" :validation-schema="validationSchema" v-slot="{ meta: formMeta }" @submit="onSubmit">
-                  <InputDefault name="username" label="Username" placeholder="Username..." :readonly="loading" />
-                  <InputAppend name="password" label="Password" placeholder="Password" :readonly="loading" :type="memoType" :icon="memoIcon" @click-append="togglePassword" />
-                  <ButtonDefault type="submit" :waiting="loading">
-                    <template #default>
-                        Sign In
-                    </template>
-                  </ButtonDefault>
+                <VForm :initial-values="initialValues" :validation-schema="validationSchema" v-slot="{ meta: formMeta }"
+                    @submit="onSubmit">
+                    <InputDefault name="username" label="Username" placeholder="Username..." :readonly="loading" />
+                    <InputAppend name="password" label="Password" placeholder="Password" :readonly="loading"
+                        :type="memoType" :icon="memoIcon" @click-append="togglePassword" />
+                    <ButtonDefault type="submit" :waiting="loading">
+                        <template #default>
+                            Sign In
+                        </template>
+                    </ButtonDefault>
                 </VForm>
             </template>
         </BoxDefault>
