@@ -17,10 +17,12 @@ module.exports = {
       "2xl": "1536px",
     },
     minWidth: {
-        1: '8rem', 2: '15rem'
+        1: '8rem', 
+        2: '15rem'
     },
     minHeight: {
-      1: '3rem'
+      1: '3rem',
+      2: '2rem'
     },
     extend: {},
   },

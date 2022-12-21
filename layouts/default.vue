@@ -47,8 +47,9 @@ watch(checked, () => {
 
 <template>
   <Navbar>
-    <div class="flex-1"></div>
-    <div class="flex-none">
+    <div class="navbar-start"></div>
+    <div class="navbar-center"></div>
+    <div class="navbar-end">
       <label class="swap swap-rotate">
         <input type="checkbox" v-model="checked" />
         <IconSun className="swap-on fill-current w-7 h-7 dark:text-white" />
