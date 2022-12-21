@@ -2,10 +2,6 @@
 const themeStore = useThemeStore()
 const breakpointStore = useBreakpointStore()
 
-// const isDark = computed(() => {
-//   return themeStore.getMode === 'light' ? false : true
-// })
-
 const checked = ref(themeStore.isDark)
 
 const onResize = () => {
