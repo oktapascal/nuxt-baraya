@@ -1,26 +1,12 @@
 <script setup>
-import { Icon } from "@iconify/vue"
-
 const themeStore = useThemeStore()
 const breakpointStore = useBreakpointStore()
 
-const toggleTheme = (newMode) => {
-  themeStore.toggleMode(newMode)
+// const isDark = computed(() => {
+//   return themeStore.getMode === 'light' ? false : true
+// })
 
-  if (newMode === 'light') {
-    document.documentElement.classList.remove("dark")
-  } else {
-    document.documentElement.classList.add("dark")
-  }
-}
-
-const memoIcon = computed(() => {
-  return themeStore.getMode === 'light' ? 'mdi:white-balance-sunny' : 'mdi:weather-night'
-})
-
-const memoParameter = computed(() => {
-  return themeStore.getMode === 'light' ? 'dark' : 'light'
-})
+const checked = ref(themeStore.isDark)
 
 const onResize = () => {
   const width = window.screen.width
@@ -49,15 +35,29 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('resize', onResize)
 })
+
+watchEffect(() => {
+  if (process.client) {
+    if (checked.value) {
+      themeStore.toggleMode('dark')
+      document.documentElement.classList.add("dark")
+    } else {
+      themeStore.toggleMode('light')
+      document.documentElement.classList.remove("dark")
+    }
+  }
+})
 </script>
 
 <template>
   <Navbar>
     <div class="flex-1"></div>
     <div class="flex-none">
-      <button class="btn btn-circle border-0" @click="toggleTheme(memoParameter)">
-        <Icon :icon="memoIcon" class="h-7 w-7 text-neutral dark:text-neutral-dark" />
-      </button>
+      <label class="swap swap-rotate">
+        <input type="checkbox" v-model="checked" />
+        <IconSun className="swap-on fill-current w-7 h-7 dark:text-white" />
+        <IconMoon className="swap-off fill-current w-7 h-7 dark:text-white" />
+      </label>
     </div>
   </Navbar>
   <main>

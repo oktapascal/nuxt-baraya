@@ -1,9 +1,11 @@
+/** @format */
+
 export const useThemeStore = defineStore('themeStore', {
   state: () => ({
     mode: useLocalStorage('theme', 'light'),
   }),
   getters: {
-    getMode: (state) => state.mode,
+    isDark: (state) => (state.mode === 'light' ? false : true),
   },
   actions: {
     toggleMode(newMode: string) {
