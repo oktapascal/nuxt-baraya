@@ -21,17 +21,16 @@ export async function loginController(event: H3Event) {
     setCookie(event, 'access-token', services.accessToken!, {
       maxAge: 8 * 60 * 60, // 8 jam
       sameSite: true,
-      httpOnly: true,
     });
 
     setCookie(event, 'refresh-token', services.refreshToken!, {
       maxAge: 24 * 60 * 60, // 24 jam
       sameSite: true,
-      httpOnly: true,
     });
 
     return services;
   } catch (error: any) {
+    console.log(error);
     if (error.data instanceof ZodError) {
       return await sendZodErrorResponse(event, error.data);
     }

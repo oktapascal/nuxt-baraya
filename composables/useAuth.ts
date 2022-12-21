@@ -9,11 +9,16 @@ export async function useUser() {
   if (authCookie && !user.value) {
     const cookieHeaders = useRequestHeaders(['cookie']);
 
-    const { data } = await useFetch('/api/auth/sessionByToken', {
+    const data = await $fetch('/api/auth/sessionByToken', {
       headers: cookieHeaders as HeadersInit,
     });
 
-    user.value = data.value;
+    const payload = {
+      id: data?.id,
+      kode_lokasi: data?.kode_lokasi,
+    };
+
+    user.value = payload;
   }
 
   return user.value;

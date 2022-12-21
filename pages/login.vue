@@ -18,6 +18,8 @@ configure({
     validateOnInput: false,
 });
 
+const router = useRouter()
+
 const loading = ref(false)
 
 const alertStore = useAlertStore()
@@ -43,20 +45,25 @@ const memoIcon = computed(() => isSecret.value ? 'mdi:eye' : 'mdi:eye-off')
 const onSubmit = async (values, actions) => {
     loading.value = true
 
-    const { error, pending } = await useFetch('/api/login', {
+    const { data, error, pending } = await useFetch('/api/login', {
         method: 'POST',
-        body: values
+        body: values,
+        pick: ['statusCode']
     })
 
     loading.value = pending.value
 
-    let statusCode;
-
-    if (error.value !== null) {
-        statusCode = error.value.statusCode
+    if (data.value.statusCode === 200) {
+        router.push('/dashboard')
     }
 
-    if (statusCode === 422) {
+    let statusCodeError;
+
+    if (error.value !== null) {
+        statusCodeError = error.value.statusCode
+    }
+
+    if (statusCodeError === 422) {
         const { data } = error.value.data
 
         const json = JSON.parse(data);
@@ -65,7 +72,7 @@ const onSubmit = async (values, actions) => {
         actions.setFieldError(field[0], json[field[0]].message)
     }
 
-    if (statusCode === 500) {
+    if (statusCodeError === 500) {
         const alert = {
             show: true,
             type: 'error',

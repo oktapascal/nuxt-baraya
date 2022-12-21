@@ -52,15 +52,15 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <Navbar>
-      <div class="flex-1"></div>
-      <div class="flex-none">
-        <button class="btn btn-circle border-0" @click="toggleTheme(memoParameter)">
-          <Icon :icon="memoIcon" class="h-7 w-7 text-neutral dark:text-neutral-dark" />
-        </button>
-      </div>
-    </Navbar>
-    <main>
-      <slot />
-    </main>
+  <Navbar>
+    <div class="flex-1"></div>
+    <div class="flex-none">
+      <button class="btn btn-circle border-0" @click="toggleTheme(memoParameter)">
+        <Icon :icon="memoIcon" class="h-7 w-7 text-neutral dark:text-neutral-dark" />
+      </button>
+    </div>
+  </Navbar>
+  <main>
+    <NuxtPage />
+  </main>
 </template>

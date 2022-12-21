@@ -6,6 +6,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   const user = await useUser();
 
   if (user != null && user != undefined) {
-    return navigateTo('/auth/protected');
+    return navigateTo('/dashboard');
   }
 });
