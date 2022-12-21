@@ -50,9 +50,9 @@ watch(checked, () => {
     <Navbar>
         <div class="navbar-start">
             <label class="swap swap-rotate">
-                <input type="checkbox" v-model="checked" />
-                <IconMenu className="swap-on fill-current h-7 w-7 dark:text-white" />
-                <IconMenuOpen className="swap-off fill-current h-7 w-7 dark:text-white" />
+                <input type="checkbox" v-model="openMenu" />
+                <IconMenu className="swap-off fill-current h-7 w-7 dark:text-white" />
+                <IconMenuOpen className="swap-on fill-current h-7 w-7 dark:text-white" />
             </label>
         </div>
         <div class="navbar-center">
@@ -66,7 +66,3 @@ watch(checked, () => {
         <NuxtPage />
     </main>
 </template>
-
-<style scoped>
-
-</style>

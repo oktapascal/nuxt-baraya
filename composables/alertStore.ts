@@ -1,3 +1,5 @@
+/** @format */
+
 import { AlertState } from '~/types/alertState';
 
 export const useAlertStore = defineStore('alertStore', {

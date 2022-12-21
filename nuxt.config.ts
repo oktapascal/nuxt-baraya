@@ -1,7 +1,6 @@
 /** @format */
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import Icons from 'unplugin-icons/vite';
 
 export default defineNuxtConfig({
   alias: {
@@ -27,13 +26,7 @@ export default defineNuxtConfig({
     },
   },
   build: {
-    transpile: [
-      '@iconify/vue',
-      'zod',
-      '@vee-validate/zod',
-      'vee-validate',
-      'daisyui',
-    ],
+    transpile: ['zod', '@vee-validate/zod', 'vee-validate', 'daisyui'],
   },
   css: ['~/assets/css/tailwind.css'],
   modules: [
@@ -48,12 +41,5 @@ export default defineNuxtConfig({
   },
   typescript: {
     shim: false,
-  },
-  vite: {
-    plugins: [
-      Icons({
-        autoInstall: true,
-      }),
-    ],
   },
 });

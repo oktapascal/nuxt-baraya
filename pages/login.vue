@@ -40,7 +40,6 @@ const togglePassword = () => {
 }
 
 const memoType = computed(() => isSecret.value ? 'password' : 'text')
-const memoIcon = computed(() => isSecret.value ? 'mdi:eye' : 'mdi:eye-off')
 
 const onSubmit = async (values, actions) => {
     loading.value = true
@@ -95,7 +94,14 @@ const onSubmit = async (values, actions) => {
                     @submit="onSubmit">
                     <InputDefault name="username" label="Username" placeholder="Username..." :readonly="loading" />
                     <InputAppend name="password" label="Password" placeholder="Password" :readonly="loading"
-                        :type="memoType" :icon="memoIcon" @click-append="togglePassword" />
+                        :type="memoType" @click-append="togglePassword" v-slot="slotProps">
+                        <IconEye v-if="isSecret" className="h-7 w-7 cursor-pointer icon" :class="{
+                            'error': slotProps.isError
+                        }" />
+                        <IconEyeOff v-else className="h-7 w-7 cursor-pointer icon" :class="{
+                            'error': slotProps.isError
+                        }" />
+                    </InputAppend>
                     <ButtonDefault type="submit" :waiting="loading">
                         <template #default>
                             Sign In
