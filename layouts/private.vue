@@ -1,17 +1,15 @@
 <script setup>
-import { Icon } from "@iconify/vue"
-
 const openMenu = ref(false)
-
-const memoMenu = computed(() => {
-    return openMenu ? 'mdi:menu-open' : 'mdi:menu'
-})
 </script>
 
 <template>
     <Navbar>
         <div class="flex-none">
-            <Icon :icon="memoMenu" class="h-7 w-7 dark:text-white" />
+            <label class="swap swap-rotate">
+                <input type="checkbox" v-model="checked" />
+                <IconMenu className="swap-on fill-current h-7 w-7 dark:text-white" />
+                <IconMenuOpen className="swap-off fill-current h-7 w-7 dark:text-white" />
+            </label>
         </div>
     </Navbar>
     <main>

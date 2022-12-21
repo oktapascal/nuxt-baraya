@@ -32,7 +32,7 @@ onUnmounted(() => {
   window.removeEventListener('resize', onResize)
 })
 
-watchEffect(() => {
+watch(checked, () => {
   if (process.client) {
     if (checked.value) {
       themeStore.toggleMode('dark')
