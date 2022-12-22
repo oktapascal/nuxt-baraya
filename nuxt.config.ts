@@ -26,7 +26,7 @@ export default defineNuxtConfig({
     },
   },
   build: {
-    transpile: ['zod', '@vee-validate/zod', 'daisyui'],
+    transpile: ['zod', '@vee-validate/zod', 'vee-validate'],
   },
   css: ['~/assets/css/tailwind.css'],
   modules: [
