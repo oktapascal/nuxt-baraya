@@ -30,8 +30,7 @@ export async function loginService(data: LoginRequest) {
   }
 
   const user: IUser = {
-    username: userData!.username,
-    kode_lokasi: userData!.karyawan!.kode_lokasi,
+    id: userData!.id,
   };
 
   const accessToken = generateAccessToken(user);

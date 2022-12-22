@@ -6,6 +6,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   const user = await useUser();
 
   if (user != null && user != undefined) {
-    return navigateTo('/dashboard');
+    return navigateTo('/dashboard', { redirectCode: 301 });
   }
 });
