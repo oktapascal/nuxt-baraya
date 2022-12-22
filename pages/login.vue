@@ -44,15 +44,14 @@ const memoType = computed(() => isSecret.value ? 'password' : 'text')
 const onSubmit = async (values, actions) => {
     loading.value = true
 
-    const { data, error, pending } = await useFetch('/api/login', {
+    const { error, pending } = await useFetch('/api/login', {
         method: 'POST',
         body: values,
-        pick: ['statusCode']
     })
 
     loading.value = pending.value
 
-    if (data.value.statusCode === 200) {
+    if (error.value === null) {
         router.push('/dashboard')
     }
 
@@ -110,12 +109,10 @@ const onSubmit = async (values, actions) => {
                 </VForm>
             </template>
         </BoxDefault>
-        <Teleport to="body">
-            <AlertDefault v-if="alertStore.getAlert.show">
-                <template #default>
-                    {{ alertStore.getAlert.text }}
-                </template>
-            </AlertDefault>
-        </Teleport>
+        <AlertDefault>
+            <template #default>
+                {{ alertStore.getAlert.text }}
+            </template>
+        </AlertDefault>
     </div>
 </template>
