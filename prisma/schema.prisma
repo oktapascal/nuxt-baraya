@@ -8,20 +8,19 @@ datasource db {
 }
 
 model karyawan {
-  id          Int     @id @default(autoincrement())
-  nik         String?
+  nik         String? @unique
   nama        String?
   alamat      String?
   no_telp     String?
   email       String?
   foto        String?
   kode_lokasi String
-  id_user     Int     @unique(map: "Karyawan_id_user_key")
-  user        user    @relation(fields: [id_user], references: [id], map: "Karyawan_id_user_fkey")
+  id_user     String  @unique(map: "Karyawan_id_user_key")
+  user        user    @relation(fields: [id_user], references: [id], map: "Karyawan_id_user_fkey", onDelete: Cascade, onUpdate: Cascade)
 }
 
 model user {
-  id       Int       @id @default(autoincrement())
+  id       String    @id
   username String    @unique(map: "User_username_key")
   password String
   karyawan karyawan?
@@ -29,10 +28,9 @@ model user {
 }
 
 model session {
-  id        Int       @id @default(autoincrement())
   authToken String    @unique
-  id_user   Int
-  user      user      @relation(fields: [id_user], references: [id])
+  id_user   String
+  user      user      @relation(fields: [id_user], references: [id], onDelete: Cascade, onUpdate: Cascade)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
