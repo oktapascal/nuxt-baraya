@@ -2,8 +2,8 @@ import { IUser } from '~/types/domain/IUser'
 import { RegisterRequest } from '~/types/web/register_request'
 import { IRegisterServices } from './IRegisterServices'
 import { RegisterRepository } from '~/server/repositories/auth/RegisterRepository'
-import bcrypt from 'bcrypt';
-import crypto from 'crypto';
+import bcrypt from 'bcrypt'
+import crypto from 'crypto'
 import { ErrorResponse } from '~/types/web/error_response'
 
 export class RegisterServices implements IRegisterServices {
@@ -11,7 +11,7 @@ export class RegisterServices implements IRegisterServices {
     }
 
     async register(request: RegisterRequest): Promise<void|ErrorResponse> {
-       const errors = new Map<string, { message: string | undefined }>();
+       const errors = new Map<string, { message: string | undefined }>()
 
         const isUsernameExist = await this._registerRepository.checkUsername(request.username)
 
@@ -24,11 +24,11 @@ export class RegisterServices implements IRegisterServices {
             return { hasError: true, error: errorResponse }
         }
 
-        let password: string;
-        password = await bcrypt.hash(request.password, 10);
+        let password: string
+        password = await bcrypt.hash(request.password, 10)
         request.password = password
 
-        let id: string;
+        let id: string
         id = crypto.randomUUID()
         request.id = id
 

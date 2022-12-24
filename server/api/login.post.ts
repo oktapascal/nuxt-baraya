@@ -10,7 +10,7 @@ export default defineEventHandler(async (event: H3Event) => {
   const loginServices = new LoginServices(loginRepository)
   const loginController = new LoginController(event, loginServices)
 
-  const response = loginController.login()
+  const response = await loginController.login()
 
-  // return { statusCode: 200, message: 'Login Success', data: response };
+  return { statusCode: 200, message: 'Login Success' };
 });
