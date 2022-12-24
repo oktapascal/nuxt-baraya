@@ -10,6 +10,7 @@ import { ErrorResponse } from '~/types/web/error_response'
 import { UserIDResponse } from '~/types/web/user_id_response'
 import { SessionRequest } from '~/types/web/session_request'
 import { generateAccessToken, generateRefreshToken } from '~/utils/jwt'
+import auth from "~/middleware/auth";
 
 export class AuthController implements  IAuthController {
     constructor(private readonly event: H3Event, private readonly _authService: AuthServices) {
@@ -68,6 +69,26 @@ export class AuthController implements  IAuthController {
                 return await sendZodErrorResponse(this.event, e.data);
             }
 
+            return await sendDefaultErrorResponse(this.event, 'oops', 500, e);
+        }
+    }
+
+    async logout(): Promise<void> {
+        try {
+            const authToken = getCookie(this.event, 'access-token')
+
+            await this._authService.logout(authToken!)
+
+            setCookie(this.event, 'access-token', '', {
+                maxAge: -1,
+                sameSite: true,
+            });
+
+            setCookie(this.event, 'refresh-token', '', {
+                maxAge: -1, // 24 jam
+                sameSite: true,
+            });
+        } catch (e:any) {
             return await sendDefaultErrorResponse(this.event, 'oops', 500, e);
         }
     }

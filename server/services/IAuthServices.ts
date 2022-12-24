@@ -8,4 +8,5 @@ export interface IAuthServices {
     showUser(request: LoginRequest): Promise<UserIDResponse|ErrorResponse>
     storeSessionUser(request: SessionRequest): Promise<void>
     register(request: RegisterRequest): Promise<void|ErrorResponse>
+    logout(authToken: string): Promise<void>
 }

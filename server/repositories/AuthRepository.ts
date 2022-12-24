@@ -48,4 +48,15 @@ export class AuthRepository implements IAuthRepository {
 
         return result === 0
     }
+
+    async deleteSessionByAuthToken(authToken: string): Promise<void> {
+        await prisma.session.update({
+            data: {
+                deletedAt: new Date().toISOString(),
+            },
+            where: {
+                authToken: authToken,
+            },
+        });
+    }
 }

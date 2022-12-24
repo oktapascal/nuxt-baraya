@@ -10,5 +10,5 @@ export default defineEventHandler(async (event: H3Event) => {
 
   await authController.login()
 
-  return { statusCode: 200, message: 'Login Success' };
+  return { statusCode: 200, message: 'Login Success' }
 });

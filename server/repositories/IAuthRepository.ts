@@ -6,4 +6,5 @@ export interface IAuthRepository {
     checkUsername(username: string): Promise<boolean>
     showUser(username: string): Promise<IUser|null>
     storeSessionUser(session: ISession): Promise<void>
+    deleteSessionByAuthToken(authToken: string): Promise<void>
 }

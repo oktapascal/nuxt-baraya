@@ -7,8 +7,8 @@ import { IAuthServices } from '~/server/services/IAuthServices'
 import { AuthRepository } from '~/server/repositories/AuthRepository'
 import bcrypt from 'bcrypt'
 import crypto from 'crypto'
-import {ISession} from "~/types/domain/ISession";
-import {IUser} from "~/types/domain/IUser";
+import { ISession } from "~/types/domain/ISession";
+import { IUser } from "~/types/domain/IUser";
 
 export class AuthServices implements IAuthServices {
     constructor(private readonly _authRepository: AuthRepository) {
@@ -86,5 +86,10 @@ export class AuthServices implements IAuthServices {
         }
 
         await this._authRepository.register(data)
+    }
+
+
+    async logout(authToken: string): Promise<void> {
+        await this._authRepository.deleteSessionByAuthToken(authToken)
     }
 }
