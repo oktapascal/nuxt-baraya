@@ -26,10 +26,12 @@ export class RegisterServices implements IRegisterServices {
                 return sendError(this.event, createError({ statusCode: 422, data: errorResponse }));
             }
 
-            const password = await bcrypt.hash(request.password, 10);
+            let password: string;
+            password = await bcrypt.hash(request.password, 10);
             request.password = password
 
-            const id = crypto.randomUUID()
+            let id: string;
+            id = crypto.randomUUID()
             request.id = id
 
             const data: IUser = {
