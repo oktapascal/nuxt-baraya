@@ -10,7 +10,7 @@ export class RegisterRepository implements  IRegisterRepository{
                 password: user.password,
                 karyawan: {
                     create: {
-                        kode_lokasi: user.kode_lokasi
+                        kode_lokasi: user.kode_lokasi!
                     }
                 }
             }
