@@ -7,7 +7,7 @@ export default defineEventHandler(async (event: H3Event) => {
   const registerService = new RegisterServices(event, registerRepository)
   const registerController = new RegisterController(event, registerService)
 
-  const response = await registerController.save(event)
+  await registerController.save(event)
 
-  return { message: 'User berhasil didaftarkan', data: response };
+  return { message: 'User berhasil didaftarkan', status: true };
 });

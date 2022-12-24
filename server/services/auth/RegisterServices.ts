@@ -11,7 +11,7 @@ export class RegisterServices implements IRegisterServices {
     constructor(private readonly  event: H3Event, private readonly _registerRepo: RegisterRepository) {
     }
 
-    async register(request: Register_request): Promise<any> {
+    async register(request: Register_request): Promise<void> {
         try {
             const errors = new Map<string, { message: string | undefined }>();
 
@@ -40,8 +40,6 @@ export class RegisterServices implements IRegisterServices {
             }
 
             await this._registerRepo.register(data)
-
-            return { status: true }
         } catch (e: any) {
             return await sendDefaultErrorResponse(this.event, 'oops', 500, e);
         }

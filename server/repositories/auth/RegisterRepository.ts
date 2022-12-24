@@ -2,7 +2,7 @@ import prisma from '~/prisma/client'
 import { IUser } from '~/types/domain/IUser'
 import { IRegisterRepository } from './IRegisterRepository'
 export class RegisterRepository implements  IRegisterRepository{
-    async register(user: IUser): Promise<any> {
+    async register(user: IUser): Promise<void> {
         await prisma.user.create({
             data: {
                 id: user.id,
