@@ -19,7 +19,7 @@ export class LoginRepository implements ILoginRepository{
         await prisma.session.create({
             data: {
                 id_user: session.id_user,
-                authToken: session.authToken
+                authToken: session.authToken,
             }
         })
     }

@@ -1,16 +1,17 @@
-import { IUser } from '~/types/domain/IUser'
 import { LoginRequest } from '~/types/web/login_request'
 import { SessionRequest } from '~/types/web/session_request'
 import { ILoginServices } from '~/server/services/auth/ILoginServices'
 import { LoginRepository } from '~/server/repositories/auth/LoginRepository'
 import { ErrorResponse } from '~/types/web/error_response'
+import { UserIDResponse } from '~/types/web/user_id_response'
 import bcrypt from 'bcrypt'
+import { ISession } from '~/types/domain/ISession';
 
 export class LoginServices implements  ILoginServices {
     constructor(private readonly _loginRepository: LoginRepository) {
     }
 
-    async showUser(request: LoginRequest): Promise<IUser|ErrorResponse> {
+    async showUser(request: LoginRequest): Promise<UserIDResponse|ErrorResponse> {
         const errors = new Map<string, { message: string | undefined }>()
         const user = await this._loginRepository.showUser(request.username)
 
@@ -35,10 +36,22 @@ export class LoginServices implements  ILoginServices {
             return { hasError: true, error: errorResponse }
         }
 
-        return user!
+        let response: UserIDResponse
+        response = {
+            id_user: user?.id!
+        }
+
+        return response
     }
 
     async storeSessionUser(request: SessionRequest): Promise<void> {
+        let session: ISession
+        session = {
+            id_user: request.id_user,
+            authToken: request.authToken
+        }
+
+        await this._loginRepository.storeSessionUser(session)
     }
 
 }

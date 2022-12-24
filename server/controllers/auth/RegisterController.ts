@@ -8,7 +8,7 @@ import sendDefaultErrorResponse from '~/utils/responses/errorsDefault'
 export class RegisterController implements IRegisterController {
     constructor(private readonly event: H3Event, private readonly _registerService: RegisterServices) {
     }
-    async save(event: H3Event): Promise<void> {
+    async save(): Promise<void> {
         try {
             const request = await RegisterRequest(this.event)
 
@@ -19,10 +19,10 @@ export class RegisterController implements IRegisterController {
             }
         } catch (e:any) {
             if (e.data instanceof ZodError) {
-                return await sendZodErrorResponse(event, e.data);
+                return await sendZodErrorResponse(this.event, e.data);
             }
 
-            return await sendDefaultErrorResponse(event, 'oops', 500, e);
+            return await sendDefaultErrorResponse(this.event, 'oops', 500, e);
         }
     }
 }

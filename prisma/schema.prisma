@@ -28,7 +28,7 @@ model user {
 }
 
 model session {
-  authToken String    @unique
+  authToken String    @unique @db.VarChar(195)
   id_user   String
   user      user      @relation(fields: [id_user], references: [id], onDelete: Cascade, onUpdate: Cascade)
   createdAt DateTime  @default(now())

@@ -1,5 +1,4 @@
 /** @format */
-
 export function getToday(date: Date) {
   return (
     date.getFullYear() +
