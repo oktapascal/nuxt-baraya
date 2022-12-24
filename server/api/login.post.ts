@@ -1,16 +1,14 @@
-/** @format */
-
 import { H3Event } from 'h3';
-import { LoginRepository } from '~/server/repositories/auth/LoginRepository'
-import { LoginServices } from '~/server/services/auth/LoginServices'
-import { LoginController } from '~/server/controllers/auth/LoginController'
+import { AuthRepository } from '~/server/repositories/AuthRepository'
+import { AuthServices } from '~/server/services/AuthServices'
+import { AuthController } from '~/server/controllers/AuthController'
 
 export default defineEventHandler(async (event: H3Event) => {
-  const loginRepository = new LoginRepository()
-  const loginServices = new LoginServices(loginRepository)
-  const loginController = new LoginController(event, loginServices)
+  const authRepository = new AuthRepository()
+  const authServices = new AuthServices(authRepository)
+  const authController = new AuthController(event, authServices)
 
-  const response = await loginController.login()
+  await authController.login()
 
   return { statusCode: 200, message: 'Login Success' };
 });
