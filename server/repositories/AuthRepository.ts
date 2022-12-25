@@ -1,9 +1,10 @@
 import prisma from '~/prisma/client'
-import { session as Session, user as User } from '@prisma/client'
+import { session as Session, user as User, karyawan as Karyawan } from '@prisma/client'
 import { IUser } from '~/types/domain/IUser'
 import { ISession } from '~/types/domain/ISession'
 import { IAuthRepository } from '~/server/repositories/IAuthRepository'
 
+type DataUser = (User & { karyawan: Karyawan|null })
 export class AuthRepository implements IAuthRepository {
     async register(user: IUser): Promise<void> {
         await prisma.user.create({
@@ -63,12 +64,25 @@ export class AuthRepository implements IAuthRepository {
     }
 
     async getUserBySession(authToken: string): Promise<Session|null> {
-        const session = await  prisma.session.findUnique({
+        const session = await prisma.session.findUnique({
             where: {
                 authToken: authToken
             }
         })
 
         return session
+    }
+
+    async getUserRoleLocation(id_user: string): Promise<DataUser|null> {
+        const user = await prisma.user.findUnique({
+            where: {
+                id: id_user
+            },
+            include: {
+                karyawan: true
+            }
+        })
+
+        return user
     }
 }

@@ -4,11 +4,11 @@ import { AuthServices } from '~/server/services/AuthServices'
 import { AuthController } from '~/server/controllers/AuthController'
 
 export default defineEventHandler(async (event: H3Event) => {
-  const authRepository = new AuthRepository()
-  const authServices = new AuthServices(authRepository)
-  const authController = new AuthController(event, authServices)
+    const authRepository = new AuthRepository()
+    const authServices = new AuthServices(authRepository)
+    const authController = new AuthController(event, authServices)
 
-  await authController.login()
+    const user = await authController.getUserRoleLocation()
 
-  return { statusCode: 200, message: 'Login Success' }
+    return user
 });

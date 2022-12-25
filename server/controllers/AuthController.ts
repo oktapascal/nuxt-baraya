@@ -10,6 +10,7 @@ import { ErrorResponse } from '~/types/web/error_response'
 import { UserIDResponse } from '~/types/web/user_id_response'
 import { SessionRequest } from '~/types/web/session_request'
 import { generateAccessToken, generateRefreshToken } from '~/utils/jwt'
+import { UserRoleResponse } from '~/types/web/user_role_response'
 
 export class AuthController implements  IAuthController {
     constructor(private readonly event: H3Event, private readonly _authService: AuthServices) {
@@ -87,6 +88,29 @@ export class AuthController implements  IAuthController {
                 sameSite: true,
             });
         } catch (e:any) {
+            return await sendDefaultErrorResponse(this.event, 'oops', 500, e);
+        }
+    }
+
+    async getUserRoleLocation(): Promise<UserRoleResponse|null|void> {
+        try {
+            const authToken = getCookie(this.event, 'access-token')
+
+            if(authToken == undefined) {
+                return null
+            }
+
+            const userId = await this._authService.getUserBySession(authToken)
+
+            if(userId === null) {
+                return null
+            }
+
+            let user: UserRoleResponse
+            user = await this._authService.getUserRoleLocation(userId.id_user)
+
+            return user
+        } catch (e: any) {
             return await sendDefaultErrorResponse(this.event, 'oops', 500, e);
         }
     }

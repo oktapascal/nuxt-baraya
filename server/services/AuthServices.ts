@@ -9,12 +9,13 @@ import bcrypt from 'bcrypt'
 import crypto from 'crypto'
 import { ISession } from "~/types/domain/ISession";
 import { IUser } from "~/types/domain/IUser";
+import { UserRoleResponse } from '~/types/web/user_role_response'
 
 export class AuthServices implements IAuthServices {
     constructor(private readonly _authRepository: AuthRepository) {
     }
-    async showUser(request: LoginRequest): Promise<UserIDResponse | ErrorResponse> {
-        const errors = new Map<string, { message: string | undefined }>()
+    async showUser(request: LoginRequest): Promise<UserIDResponse|ErrorResponse> {
+        const errors = new Map<string, { message: string|undefined }>()
         const user = await this._authRepository.showUser(request.username)
 
         if(user === null) {
@@ -56,7 +57,7 @@ export class AuthServices implements IAuthServices {
         await this._authRepository.storeSessionUser(session)
     }
 
-    async register(request: RegisterRequest): Promise<void | ErrorResponse> {
+    async register(request: RegisterRequest): Promise<void|ErrorResponse> {
         const errors = new Map<string, { message: string | undefined }>()
 
         const isUsernameExist = await this._authRepository.checkUsername(request.username)
@@ -89,8 +90,30 @@ export class AuthServices implements IAuthServices {
         await this._authRepository.register(data)
     }
 
-
     async logout(authToken: string): Promise<void> {
         await this._authRepository.deleteSessionByAuthToken(authToken)
+    }
+
+    async getUserBySession(authToken: string): Promise<UserIDResponse|null> {
+        const user = await this._authRepository.getUserBySession(authToken)
+
+        let data: UserIDResponse
+        data = {
+            id_user: user!.id_user
+        }
+
+        return data
+    }
+
+    async getUserRoleLocation(id_user: string): Promise<UserRoleResponse> {
+        const user = await this._authRepository.getUserRoleLocation(id_user)
+
+        let data: UserRoleResponse
+        data = {
+            role: user!.role,
+            kode_lokasi: user!.karyawan!.kode_lokasi
+        }
+
+        return data
     }
 }

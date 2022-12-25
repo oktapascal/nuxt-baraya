@@ -1,4 +1,4 @@
-import { H3Event } from 'h3';
+import { H3Event } from 'h3'
 import { AuthRepository } from '~/server/repositories/AuthRepository'
 import { AuthServices } from '~/server/services/AuthServices'
 import { AuthController } from '~/server/controllers/AuthController'
