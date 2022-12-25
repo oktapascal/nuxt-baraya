@@ -82,6 +82,7 @@ export class AuthServices implements IAuthServices {
             id: request.id,
             username: request.username,
             password: request.password,
+            role: request.role,
             kode_lokasi: request.kode_lokasi
         }
 

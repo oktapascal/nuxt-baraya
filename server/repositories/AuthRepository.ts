@@ -1,4 +1,5 @@
 import prisma from '~/prisma/client'
+import { user as User } from '@prisma/client'
 import { IUser } from '~/types/domain/IUser'
 import { ISession } from '~/types/domain/ISession'
 import { IAuthRepository } from '~/server/repositories/IAuthRepository'
@@ -10,6 +11,7 @@ export class AuthRepository implements IAuthRepository {
                 id: user.id,
                 username: user.username,
                 password: user.password,
+                role: user.role,
                 karyawan: {
                     create: {
                         kode_lokasi: user.kode_lokasi!
@@ -58,5 +60,9 @@ export class AuthRepository implements IAuthRepository {
                 authToken: authToken,
             },
         });
+    }
+
+    async getUserBySession(authToken: string): Promise<User> {
+
     }
 }

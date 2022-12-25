@@ -7,4 +7,5 @@ export interface IAuthRepository {
     showUser(username: string): Promise<IUser|null>
     storeSessionUser(session: ISession): Promise<void>
     deleteSessionByAuthToken(authToken: string): Promise<void>
+    getUserBySession(authToken: string): Promise<IUser>
 }

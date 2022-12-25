@@ -10,7 +10,6 @@ import { ErrorResponse } from '~/types/web/error_response'
 import { UserIDResponse } from '~/types/web/user_id_response'
 import { SessionRequest } from '~/types/web/session_request'
 import { generateAccessToken, generateRefreshToken } from '~/utils/jwt'
-import auth from "~/middleware/auth";
 
 export class AuthController implements  IAuthController {
     constructor(private readonly event: H3Event, private readonly _authService: AuthServices) {
@@ -46,7 +45,6 @@ export class AuthController implements  IAuthController {
                 sameSite: true,
             });
         } catch (e:any) {
-            console.log(e)
             if (e.data instanceof ZodError) {
                 return await sendZodErrorResponse(this.event, e.data);
             }

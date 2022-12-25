@@ -3,4 +3,5 @@ export interface RegisterRequest {
     username: string
     password: string
     kode_lokasi: string
+    role: string
 }
