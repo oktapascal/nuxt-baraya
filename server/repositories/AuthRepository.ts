@@ -1,5 +1,5 @@
 import prisma from '~/prisma/client'
-import { user as User } from '@prisma/client'
+import { session as Session, user as User } from '@prisma/client'
 import { IUser } from '~/types/domain/IUser'
 import { ISession } from '~/types/domain/ISession'
 import { IAuthRepository } from '~/server/repositories/IAuthRepository'
@@ -21,7 +21,7 @@ export class AuthRepository implements IAuthRepository {
         })
     }
 
-    async showUser(username: string): Promise<IUser | null> {
+    async showUser(username: string): Promise<User|null> {
         let user: IUser|null
         user = await prisma.user.findUnique({
             where: {
@@ -62,7 +62,13 @@ export class AuthRepository implements IAuthRepository {
         });
     }
 
-    async getUserBySession(authToken: string): Promise<User> {
+    async getUserBySession(authToken: string): Promise<Session|null> {
+        const session = await  prisma.session.findUnique({
+            where: {
+                authToken: authToken
+            }
+        })
 
+        return session
     }
 }
