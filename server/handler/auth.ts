@@ -36,7 +36,7 @@ export default defineEventHandler((event: H3Event) => {
     if(payload == null) {
       throw createError({statusCode: 401, statusMessage: 'unauthorized' })
     }
-    
+
     event.context.auth = {
       authenticated: true,
       id_user: (payload as JwtPayload).id_user
