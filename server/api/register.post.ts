@@ -10,4 +10,4 @@ export default defineEventHandler(async (event: H3Event) => {
   await authController.save()
 
   return { message: 'User berhasil didaftarkan', status: true }
-});
+})

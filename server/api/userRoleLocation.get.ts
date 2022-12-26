@@ -11,4 +11,4 @@ export default defineEventHandler(async (event: H3Event) => {
     const user = await authController.getUserRoleLocation()
 
     return user
-});
+})
