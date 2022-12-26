@@ -9,7 +9,7 @@ import sendDefaultErrorResponse from '~/utils/responses/errorsDefault'
 import { ErrorResponse } from '~/types/web/error_response'
 import { UserIDResponse } from '~/types/web/user_id_response'
 import { SessionRequest } from '~/types/web/session_request'
-import { generateAccessToken, generateRefreshToken } from '~/utils/jwt'
+import { generateAccessToken } from '~/utils/jwt'
 import { UserRoleResponse } from '~/types/web/user_role_response'
 
 export class AuthController implements  IAuthController {
@@ -26,7 +26,6 @@ export class AuthController implements  IAuthController {
             }
 
             const authToken = generateAccessToken(response as UserIDResponse)
-            const refreshToken = generateRefreshToken(response as UserIDResponse)
 
             let sessionRequest: SessionRequest
             sessionRequest = {
@@ -38,11 +37,6 @@ export class AuthController implements  IAuthController {
 
             setCookie(this.event, 'access-token', authToken, {
                 maxAge: 8 * 60 * 60, // 8 jam
-                sameSite: true,
-            });
-
-            setCookie(this.event, 'refresh-token', refreshToken, {
-                maxAge: 24 * 60 * 60, // 24 jam
                 sameSite: true,
             });
         } catch (e:any) {
@@ -80,11 +74,6 @@ export class AuthController implements  IAuthController {
 
             setCookie(this.event, 'access-token', '', {
                 maxAge: -1,
-                sameSite: true,
-            });
-
-            setCookie(this.event, 'refresh-token', '', {
-                maxAge: -1, // 24 jam
                 sameSite: true,
             });
         } catch (e:any) {
