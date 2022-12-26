@@ -1,6 +1,6 @@
 export interface ProfileUserResume {
-    nik: string
-    foto: string
+    nik: string|null
+    foto: string|null
 }
 
 export interface ProfileUserComplete {
