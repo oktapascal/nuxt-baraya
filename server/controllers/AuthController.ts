@@ -7,10 +7,10 @@ import { ZodError } from 'zod'
 import sendZodErrorResponse from '~/utils/responses/zodErrors'
 import sendDefaultErrorResponse from '~/utils/responses/errorsDefault'
 import { ErrorResponse } from '~/types/web/error_response'
-import { UserIDResponse } from '~/types/web/user_id_response'
+import { UserIDResponse } from '~/types/web/user_response'
 import { SessionRequest } from '~/types/web/session_request'
 import { generateAccessToken } from '~/utils/jwt'
-import { UserRoleResponse } from '~/types/web/user_role_response'
+import { UserRoleResponse } from '~/types/web/user_response'
 
 export class AuthController implements  IAuthController {
     constructor(private readonly event: H3Event, private readonly _authService: AuthServices) {

@@ -1,6 +1,6 @@
 import { LoginRequest } from '~/types/web/login_request'
 import { SessionRequest } from '~/types/web/session_request'
-import { UserIDResponse } from '~/types/web/user_id_response'
+import { UserIDResponse, UserRoleResponse } from '~/types/web/user_response'
 import { ErrorResponse } from '~/types/web/error_response'
 import { RegisterRequest } from '~/types/web/register_request'
 import { IAuthServices } from '~/server/services/IAuthServices'
@@ -8,8 +8,7 @@ import { AuthRepository } from '~/server/repositories/AuthRepository'
 import bcrypt from 'bcrypt'
 import crypto from 'crypto'
 import { ISession } from "~/types/domain/ISession";
-import { IUser } from "~/types/domain/IUser";
-import { UserRoleResponse } from '~/types/web/user_role_response'
+import { IUser } from '~/types/domain/IUser'
 
 export class AuthServices implements IAuthServices {
     constructor(private readonly _authRepository: AuthRepository) {
