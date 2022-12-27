@@ -37,8 +37,8 @@ onUnmounted(() => {
         <div class="navbar-start">
             <label class="swap swap-rotate">
                 <input type="checkbox" v-model="openMenu" />
-                <IconMenu className="swap-off h-7 w-7 dark:text-white" />
-                <IconMenuOpen className="swap-on h-7 w-7 dark:text-white" />
+                <IconMenu className="swap-off fill-current h-7 w-7 dark:text-white" />
+                <IconMenuOpen className="swap-on fill-current h-7 w-7 dark:text-white" />
             </label>
         </div>
         <div class="navbar-end">
@@ -48,6 +48,7 @@ onUnmounted(() => {
           </client-only>
         </div>
     </Navbar>
+    <ConfigApp />
     <main>
         <NuxtPage />
     </main>
