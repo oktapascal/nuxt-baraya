@@ -10,5 +10,7 @@ export default defineEventHandler(async (event: H3Event) => {
 
     const response = await profileController.getProfileUserResume()
 
+    appendHeader(event, 'Cache-Control', 'private')
+    appendHeader(event, 'Cache-Control', 'max-age=3600')
     return { statusCode: 200, data: response }
 })
