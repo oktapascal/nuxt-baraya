@@ -44,6 +44,7 @@ onUnmounted(() => {
         <div class="navbar-end">
           <client-only>
             <NavbarEndMobile v-if="breakpointStore.checkIsMobile" />
+            <NavbarEnd v-else />
           </client-only>
         </div>
     </Navbar>
