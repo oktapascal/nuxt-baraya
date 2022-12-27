@@ -37,16 +37,14 @@ onUnmounted(() => {
         <div class="navbar-start">
             <label class="swap swap-rotate">
                 <input type="checkbox" v-model="openMenu" />
-                <IconMenu className="swap-off fill-current h-7 w-7 dark:text-white" />
-                <IconMenuOpen className="swap-on fill-current h-7 w-7 dark:text-white" />
+                <IconMenu className="swap-off h-7 w-7 dark:text-white" />
+                <IconMenuOpen className="swap-on h-7 w-7 dark:text-white" />
             </label>
         </div>
-        <div class="navbar-center">
-            <img alt="logo" src="/images/logo.jpeg" class="h-10" />
-        </div>
         <div class="navbar-end">
+          <client-only>
             <NavbarEndMobile v-if="breakpointStore.checkIsMobile" />
-            <NavbarEnd v-else />
+          </client-only>
         </div>
     </Navbar>
     <main>
