@@ -22,7 +22,7 @@ export class AuthController implements IAuthController {
             const id_user = await this._authService.showUser(this.event, request);
 
             const authToken = generateAccessToken(id_user as string);
-
+            
             let session: SessionRequest;
             session = {
                 id_user: id_user as string,

@@ -1,6 +1,8 @@
-import { ProfileUserComplete, ProfileUserResume } from '~/types/web/profile_response'
+import {ProfileUserComplete, ProfileUserResume} from "~/types/web/profile_response";
+import {H3Event} from "h3";
 
 export interface IProfileServices {
-    getProfileResume(id_user: string): Promise<ProfileUserResume>
-    getProfileUserComplete(id_user:string): Promise<ProfileUserComplete>
+    getProfileResume(event: H3Event, id_user: string): Promise<ProfileUserResume | void>;
+
+    getProfileUserComplete(event: H3Event, id_user: string): Promise<ProfileUserComplete | void>;
 }

@@ -60,7 +60,7 @@ export class AuthServices implements IAuthServices {
             const user = await this._authRepository.showUser(request.username);
 
             if (user === null) {
-                this.errors.set("username", {message: "Username sudah terdaftar"});
+                this.errors.set("username", {message: "Username tidak terdaftar"});
                 throw createError({
                     statusCode: 402,
                     statusMessage: "Unprocessable Entity",
