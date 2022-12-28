@@ -30,8 +30,6 @@ export default defineNuxtConfig({
     },
     css: ["~/assets/css/tailwind.css"],
     modules: [
-        "nuxt-api-party",
-        "nuxt-security",
         "@vueuse/nuxt",
         ["@pinia/nuxt", {autoImports: ["defineStore", "acceptHMRUpdate"]}],
     ],

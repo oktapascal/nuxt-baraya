@@ -1,14 +1,16 @@
-import { H3Event } from 'h3'
-import { AuthRepository } from '~/server/repositories/AuthRepository'
-import { AuthServices } from '~/server/services/AuthServices'
-import { AuthController } from '~/server/controllers/AuthController'
+import {H3Event} from "h3";
+import {AuthRepository} from "~/server/repositories/AuthRepository";
+import {AuthServices} from "~/server/services/AuthServices";
+import {AuthController} from "~/server/controllers/AuthController";
+import {PrismaClient} from "@prisma/client";
 
 export default defineEventHandler(async (event: H3Event) => {
-    const authRepository = new AuthRepository()
-    const authServices = new AuthServices(authRepository)
-    const authController = new AuthController(event, authServices)
+    const prisma = new PrismaClient();
+    const authRepository = new AuthRepository(prisma);
+    const authServices = new AuthServices(authRepository);
+    const authController = new AuthController(event, authServices);
 
-    await authController.logout()
+    await authController.logout();
 
-    return { statusCode: 200, message: 'Logout Success' }
-})
+    return {statusCode: 200, message: "Logout Success"};
+});

@@ -1,5 +1,4 @@
-import prisma from "~/prisma/client";
-import {karyawan as Karyawan, session as Session, user as User} from "@prisma/client";
+import {karyawan as Karyawan, PrismaClient, session as Session, user as User} from "@prisma/client";
 import {IUser} from "~/types/domain/IUser";
 import {ISession} from "~/types/domain/ISession";
 import {IAuthRepository} from "~/server/repositories/IAuthRepository";
@@ -7,8 +6,11 @@ import {IAuthRepository} from "~/server/repositories/IAuthRepository";
 type DataUser = (User & { karyawan: Karyawan | null })
 
 export class AuthRepository implements IAuthRepository {
+    constructor(private readonly prisma: PrismaClient) {
+    }
+
     async register(user: IUser): Promise<void> {
-        await prisma.user.create({
+        await this.prisma.user.create({
             data: {
                 id: user.id,
                 username: user.username,
@@ -25,7 +27,7 @@ export class AuthRepository implements IAuthRepository {
 
     async showUser(username: string): Promise<User | null> {
         let user: IUser | null;
-        user = await prisma.user.findUnique({
+        user = await this.prisma.user.findUnique({
             where: {
                 username: username,
             },
@@ -35,7 +37,7 @@ export class AuthRepository implements IAuthRepository {
     }
 
     async storeSessionUser(session: ISession): Promise<void> {
-        await prisma.session.create({
+        await this.prisma.session.create({
             data: {
                 id_user: session.id_user,
                 authToken: session.authToken,
@@ -44,7 +46,7 @@ export class AuthRepository implements IAuthRepository {
     }
 
     async checkUsername(username: string): Promise<boolean> {
-        const result = await prisma.user.count({
+        const result = await this.prisma.user.count({
             where: {
                 username: username,
             },
@@ -54,7 +56,7 @@ export class AuthRepository implements IAuthRepository {
     }
 
     async deleteSessionByAuthToken(authToken: string): Promise<void> {
-        await prisma.session.update({
+        await this.prisma.session.update({
             data: {
                 deletedAt: new Date().toISOString(),
             },
@@ -65,7 +67,7 @@ export class AuthRepository implements IAuthRepository {
     }
 
     async getUserBySession(authToken: string): Promise<Session | null> {
-        const session = await prisma.session.findUnique({
+        const session = await this.prisma.session.findUnique({
             where: {
                 authToken: authToken,
             },
@@ -75,7 +77,7 @@ export class AuthRepository implements IAuthRepository {
     }
 
     async getUserRoleLocation(id_user: string): Promise<DataUser | null> {
-        const user = await prisma.user.findUnique({
+        const user = await this.prisma.user.findUnique({
             where: {
                 id: id_user,
             },
