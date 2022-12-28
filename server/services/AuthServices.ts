@@ -1,118 +1,126 @@
-import { LoginRequest } from '~/types/web/login_request'
-import { SessionRequest } from '~/types/web/session_request'
-import { UserIDResponse, UserRoleResponse } from '~/types/web/user_response'
-import { ErrorResponse } from '~/types/web/error_response'
-import { RegisterRequest } from '~/types/web/register_request'
-import { IAuthServices } from '~/server/services/IAuthServices'
-import { AuthRepository } from '~/server/repositories/AuthRepository'
-import bcrypt from 'bcrypt'
-import crypto from 'crypto'
-import { ISession } from "~/types/domain/ISession";
-import { IUser } from '~/types/domain/IUser'
+import {H3Event, sendError} from "h3";
+import bcrypt from "bcrypt";
+import {RegisterRequest} from "~/types/web/register_request";
+import {IAuthServices} from "~/server/services/IAuthServices";
+import {AuthRepository} from "~/server/repositories/AuthRepository";
+import sendDefaultErrorResponse from "~/utils/responses/errorsDefault";
+import {SessionRequest} from "~/types/web/session_request";
+import {LoginRequest} from "~/types/web/login_request";
+import isH3Error from "~/utils/errors/isH3Error";
+import {ISession} from "~/types/domain/ISession";
+import {UserRoleResponse} from "~/types/web/user_response";
 
 export class AuthServices implements IAuthServices {
+    protected errors = new Map<string, { message: string | undefined }>();
+
     constructor(private readonly _authRepository: AuthRepository) {
     }
-    async showUser(request: LoginRequest): Promise<UserIDResponse|ErrorResponse> {
-        const errors = new Map<string, { message: string|undefined }>()
-        const user = await this._authRepository.showUser(request.username)
 
-        if(user === null) {
-            errors.set('username', { message: 'Username tidak terdaftar' })
+    async register(event: H3Event, request: RegisterRequest): Promise<void> {
+        try {
+            const checkUsernameExists = await this._authRepository.checkUsername(request.username);
+
+            if (!checkUsernameExists) {
+                this.errors.set("username", {message: "Username sudah terdaftar"});
+                throw createError({
+                    statusCode: 402,
+                    statusMessage: "Unprocessable Entity",
+                    data: JSON.stringify(Object.fromEntries(this.errors)),
+                });
+            }
+        } catch (err: unknown) {
+            if (isH3Error(err)) {
+                return sendError(event, err);
+            }
+
+            return await sendDefaultErrorResponse(event, "oops", 500, err);
         }
-
-        if(errors.size > 0) {
-            const errorResponse = JSON.stringify(Object.fromEntries(errors))
-            return { hasError: true, error: errorResponse }
-        }
-
-        let comparePassword: boolean
-        comparePassword = await bcrypt.compare(request.password, user?.password!)
-
-        if(!comparePassword) {
-            errors.set('password', { message: 'Password yang dimasukkan salah' })
-        }
-
-        if(errors.size > 0) {
-            const errorResponse = JSON.stringify(Object.fromEntries(errors))
-            return { hasError: true, error: errorResponse }
-        }
-
-        let response: UserIDResponse
-        response = {
-            id_user: user?.id!
-        }
-
-        return response
     }
 
-    async storeSessionUser(request: SessionRequest): Promise<void> {
-        let session: ISession
-        session = {
-            id_user: request.id_user,
-            authToken: request.authToken
-        }
+    async storeSessionUser(event: H3Event, request: SessionRequest): Promise<void> {
+        try {
+            let session: ISession;
+            session = {
+                id_user: request.id_user,
+                authToken: request.authToken,
+            };
 
-        await this._authRepository.storeSessionUser(session)
+            await this._authRepository.storeSessionUser(session);
+        } catch (err: unknown) {
+            if (isH3Error(err)) {
+                return sendError(event, err);
+            }
+
+            return await sendDefaultErrorResponse(event, "oops", 500, err);
+        }
     }
 
-    async register(request: RegisterRequest): Promise<void|ErrorResponse> {
-        const errors = new Map<string, { message: string | undefined }>()
+    async showUser(event: H3Event, request: LoginRequest): Promise<string | void> {
+        try {
+            const user = await this._authRepository.showUser(request.username);
 
-        const isUsernameExist = await this._authRepository.checkUsername(request.username)
+            if (user === null) {
+                this.errors.set("username", {message: "Username sudah terdaftar"});
+                throw createError({
+                    statusCode: 402,
+                    statusMessage: "Unprocessable Entity",
+                    data: JSON.stringify(Object.fromEntries(this.errors)),
+                });
+            }
 
-        if(!isUsernameExist) {
-            errors.set('username', { message: 'Username yang sama sudah ada' })
+            let comparePassword: boolean;
+            comparePassword = await bcrypt.compare(request.password, user.password);
+
+            if (!comparePassword) {
+                this.errors.set("password", {message: "Password tidak sesuai"});
+                throw createError({
+                    statusCode: 402,
+                    statusMessage: "Unprocessable Entity",
+                    data: JSON.stringify(Object.fromEntries(this.errors)),
+                });
+            }
+
+            return user.id;
+        } catch (err: unknown) {
+            if (isH3Error(err)) {
+                return sendError(event, err);
+            }
+
+            return await sendDefaultErrorResponse(event, "oops", 500, err);
         }
-
-        if(errors.size > 0) {
-            const errorResponse = JSON.stringify(Object.fromEntries(errors))
-            return { hasError: true, error: errorResponse }
-        }
-
-        let password: string
-        password = await bcrypt.hash(request.password, 10)
-        request.password = password
-
-        let id: string
-        id = crypto.randomUUID()
-        request.id = id
-
-        const data: IUser = {
-            id: request.id,
-            username: request.username,
-            password: request.password,
-            role: request.role,
-            kode_lokasi: request.kode_lokasi
-        }
-
-        await this._authRepository.register(data)
     }
 
-    async logout(authToken: string): Promise<void> {
-        await this._authRepository.deleteSessionByAuthToken(authToken)
+    async getUserBySession(event: H3Event, authToken: string): Promise<string | null> {
+        const user = await this._authRepository.getUserBySession(authToken);
+
+        if (user === null) {
+            return null;
+        }
+
+        return user.id_user;
     }
 
-    async getUserBySession(authToken: string): Promise<UserIDResponse|null> {
-        const user = await this._authRepository.getUserBySession(authToken)
+    async getUserRoleLocation(event: H3Event, id_user: string): Promise<UserRoleResponse | null> {
+        const user = await this._authRepository.getUserRoleLocation(id_user);
 
-        let data: UserIDResponse
+        if (user === null) {
+            return null;
+        }
+
+        if (user.karyawan === null) {
+            return null;
+        }
+
+        let data: UserRoleResponse;
         data = {
-            id_user: user!.id_user
-        }
+            role: user.role,
+            kode_lokasi: user.karyawan.kode_lokasi,
+        };
 
-        return data
+        return data;
     }
 
-    async getUserRoleLocation(id_user: string): Promise<UserRoleResponse> {
-        const user = await this._authRepository.getUserRoleLocation(id_user)
-
-        let data: UserRoleResponse
-        data = {
-            role: user!.role,
-            kode_lokasi: user!.karyawan!.kode_lokasi
-        }
-
-        return data
+    async logout(event: H3Event, authToken: string): Promise<void> {
+        await this._authRepository.deleteSessionByAuthToken(authToken);
     }
 }

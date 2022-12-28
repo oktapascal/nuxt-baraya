@@ -3,8 +3,8 @@ import { getMappingError } from '~/utils/errors/errorMapping';
 
 export default async function sendDefaultErrorResponse(
   event: H3Event,
-  errorType: string,
-  statusCode: number,
+  errorType: string = "oops",
+  statusCode: number = 500,
   error: any
 ) {
   const parsedError = getMappingError(errorType, error);

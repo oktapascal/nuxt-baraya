@@ -1,10 +1,11 @@
-import prisma from '~/prisma/client'
-import { session as Session, user as User, karyawan as Karyawan } from '@prisma/client'
-import { IUser } from '~/types/domain/IUser'
-import { ISession } from '~/types/domain/ISession'
-import { IAuthRepository } from '~/server/repositories/IAuthRepository'
+import prisma from "~/prisma/client";
+import {karyawan as Karyawan, session as Session, user as User} from "@prisma/client";
+import {IUser} from "~/types/domain/IUser";
+import {ISession} from "~/types/domain/ISession";
+import {IAuthRepository} from "~/server/repositories/IAuthRepository";
 
-type DataUser = (User & { karyawan: Karyawan|null })
+type DataUser = (User & { karyawan: Karyawan | null })
+
 export class AuthRepository implements IAuthRepository {
     async register(user: IUser): Promise<void> {
         await prisma.user.create({
@@ -15,22 +16,22 @@ export class AuthRepository implements IAuthRepository {
                 role: user.role,
                 karyawan: {
                     create: {
-                        kode_lokasi: user.kode_lokasi!
-                    }
-                }
-            }
-        })
+                        kode_lokasi: user.kode_lokasi!,
+                    },
+                },
+            },
+        });
     }
 
-    async showUser(username: string): Promise<User|null> {
-        let user: IUser|null
+    async showUser(username: string): Promise<User | null> {
+        let user: IUser | null;
         user = await prisma.user.findUnique({
             where: {
-                username: username
-            }
-        })
+                username: username,
+            },
+        });
 
-        return user
+        return user;
     }
 
     async storeSessionUser(session: ISession): Promise<void> {
@@ -38,18 +39,18 @@ export class AuthRepository implements IAuthRepository {
             data: {
                 id_user: session.id_user,
                 authToken: session.authToken,
-            }
-        })
+            },
+        });
     }
 
     async checkUsername(username: string): Promise<boolean> {
         const result = await prisma.user.count({
             where: {
-                username: username
-            }
-        })
+                username: username,
+            },
+        });
 
-        return result === 0
+        return result === 0;
     }
 
     async deleteSessionByAuthToken(authToken: string): Promise<void> {
@@ -63,26 +64,26 @@ export class AuthRepository implements IAuthRepository {
         });
     }
 
-    async getUserBySession(authToken: string): Promise<Session|null> {
+    async getUserBySession(authToken: string): Promise<Session | null> {
         const session = await prisma.session.findUnique({
             where: {
-                authToken: authToken
-            }
-        })
+                authToken: authToken,
+            },
+        });
 
-        return session
+        return session;
     }
 
-    async getUserRoleLocation(id_user: string): Promise<DataUser|null> {
+    async getUserRoleLocation(id_user: string): Promise<DataUser | null> {
         const user = await prisma.user.findUnique({
             where: {
-                id: id_user
+                id: id_user,
             },
             include: {
-                karyawan: true
-            }
-        })
+                karyawan: true,
+            },
+        });
 
-        return user
+        return user;
     }
 }
