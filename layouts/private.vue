@@ -48,7 +48,9 @@ onUnmounted(() => {
       </client-only>
     </div>
   </Navbar>
-  <ConfigApp/>
+  <client-only>
+    <ConfigApp/>
+  </client-only>
   <main id="main-page">
     <NuxtPage/>
   </main>

@@ -109,10 +109,12 @@ const onSubmit = async (values, actions) => {
         </VForm>
       </template>
     </BoxDefault>
-    <AlertDefault>
-      <template #default>
-        {{ alertStore.getAlert.text }}
-      </template>
-    </AlertDefault>
+    <client-only>
+      <AlertDefault>
+        <template #default>
+          {{ alertStore.getAlert.text }}
+        </template>
+      </AlertDefault>
+    </client-only>
   </div>
 </template>

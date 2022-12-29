@@ -11,12 +11,14 @@ const toggleSidebar = (value) => {
 };
 
 watch(checked, () => {
-  if (checked.value) {
-    themeStore.toggleMode("dark");
-    document.documentElement.classList.add("dark");
-  } else {
-    themeStore.toggleMode("light");
-    document.documentElement.classList.remove("dark");
+  if (process.client) {
+    if (checked.value) {
+      themeStore.toggleMode("dark");
+      document.documentElement.classList.add("dark");
+    } else {
+      themeStore.toggleMode("light");
+      document.documentElement.classList.remove("dark");
+    }
   }
 });
 </script>

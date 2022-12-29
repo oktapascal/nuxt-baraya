@@ -10,4 +10,11 @@ export const useBreakpointStore = defineStore("breakpointStore", {
             this.isMobile = value;
         },
     },
+    hydrate(state, initialState) {
+        const width = window.screen.width;
+
+        if (320 <= width && 768 >= width) {
+            state.isMobile = true;
+        }
+    },
 });

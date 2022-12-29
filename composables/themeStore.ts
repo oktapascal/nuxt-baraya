@@ -13,4 +13,7 @@ export const useThemeStore = defineStore("themeStore", {
             localStorage.setItem("theme", newMode);
         },
     },
+    hydrate(state, initialState) {
+        state.mode = useLocalStorage("theme", "light").value;
+    },
 });
