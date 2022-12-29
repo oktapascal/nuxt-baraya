@@ -6,7 +6,10 @@ import {IAuthRepository} from "~/server/repositories/IAuthRepository";
 type DataUser = (User & { karyawan: Karyawan | null })
 
 export class AuthRepository implements IAuthRepository {
-    constructor(private readonly prisma: PrismaClient) {
+    private readonly prisma: PrismaClient;
+
+    constructor() {
+        this.prisma = new PrismaClient();
     }
 
     async register(user: IUser): Promise<void> {

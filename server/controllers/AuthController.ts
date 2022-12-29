@@ -22,7 +22,7 @@ export class AuthController implements IAuthController {
             const id_user = await this._authService.showUser(this.event, request);
 
             const authToken = generateAccessToken(id_user as string);
-            
+
             let session: SessionRequest;
             session = {
                 id_user: id_user as string,
@@ -33,7 +33,7 @@ export class AuthController implements IAuthController {
 
             setCookie(this.event, "access-token", authToken, {
                 maxAge: 8 * 60 * 60, // 8 jam
-                sameSite: true,
+                sameSite: "strict",
             });
         } catch (err: unknown) {
             if (isH3Error(err)) {
@@ -70,7 +70,7 @@ export class AuthController implements IAuthController {
 
             setCookie(this.event, "access-token", "", {
                 maxAge: -1,
-                sameSite: true,
+                sameSite: "strict",
             });
         } catch (err: unknown) {
             if (isH3Error(err)) {

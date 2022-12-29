@@ -5,40 +5,91 @@
 @tailwind utilities;
 
 @layer components {
-  .icon {
-    @apply transition duration-300 dark:text-white;
-  }
-  .error-text {
-    @apply text-red-500 dark:text-red-700 pl-1 text-sm font-semibold;
-  }
-  .label.error {
-    @apply font-semibold text-red-500 dark:text-red-700;
-  }
-  .input.error {
-    @apply border-2 border-red-500 dark:border-red-700;
-  }
-  .input.error {
-    @apply border-2 border-red-500 dark:border-red-700;
-  }
-  .icon.error {
-    @apply text-red-500 dark:text-red-700;
-  }
-  .alert.top-center {
-    @apply top-8 left-1/4;
-  }
-  .alert.bottom-right {
-    @apply bottom-2 right-4;
-  }
-  .alert.error {
-    @apply bg-red-600 dark:bg-red-700;
-  }
-  .alert.success {
-    @apply bg-green-600 dark:bg-green-700;
-  }
-  .alert.warning {
-    @apply bg-orange-500 dark:bg-orange-700;
-  }
-  .alert.info {
-    @apply bg-gray-500 dark:bg-gray-700;
-  }
+    .icon {
+        @apply transition duration-300 dark:text-white;
+    }
+
+    .error-text {
+        @apply text-red-500 dark:text-red-700 pl-1 text-sm font-semibold;
+    }
+
+    .label.error {
+        @apply font-semibold text-red-500 dark:text-red-700;
+    }
+
+    .input.error {
+        @apply border-2 border-red-500 dark:border-red-700;
+    }
+
+    .input.error {
+        @apply border-2 border-red-500 dark:border-red-700;
+    }
+
+    .icon.error {
+        @apply text-red-500 dark:text-red-700;
+    }
+
+    .alert.top-center {
+        @apply top-8 left-1/4;
+    }
+
+    .alert.bottom-right {
+        @apply bottom-2 right-4;
+    }
+
+    .alert.error {
+        @apply bg-red-600 dark:bg-red-700;
+    }
+
+    .alert.success {
+        @apply bg-green-600 dark:bg-green-700;
+    }
+
+    .alert.warning {
+        @apply bg-orange-500 dark:bg-orange-700;
+    }
+
+    .alert.info {
+        @apply bg-gray-500 dark:bg-gray-700;
+    }
+
+    .radio-control {
+        @apply grid gap-2;
+        grid-template-columns: 1rem auto;
+    }
+
+    .radio-custom {
+        @apply bg-white border-black  dark:border-white dark:bg-gray-700 after:content-[""] before:scale-0 checked:before:scale-100;
+        width: 1.15rem;
+        height: 1.15em;
+        /* Add if not using autoprefixer */
+        -webkit-appearance: none;
+        appearance: none;
+        /* For iOS < 15 to remove gradient background */
+        background-color: #fff;
+        /* Not removed via appearance */
+        margin: 0;
+        border-radius: 50%;
+        transform: translateY(-0.075rem);
+        display: grid;
+        place-content: center;
+        border-width: 0.15rem;
+        border-style: solid;
+    }
+
+    .radio-custom::before {
+        width: 0.65rem;
+        height: 0.65rem;
+        border-radius: 50%;
+        transition: 120ms transform ease-in-out;
+        box-shadow: inset 1em 1em #1d4ed8;
+    }
+
+    .dark .radio-custom::before {
+        width: 0.65rem;
+        height: 0.65rem;
+        border-radius: 50%;
+        transition: 120ms transform ease-in-out;
+        box-shadow: inset 1em 1em #9ca3af;
+    }
 }
