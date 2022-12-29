@@ -14,6 +14,5 @@ export default defineEventHandler(async (event: H3Event) => {
 
     appendHeader(event, "Cache-Control", "private");
     appendHeader(event, "Cache-Control", "max-age=3600");
-    appendHeader(event, "Cache-Control", "must-revalidate");
     return {statusCode: 200, data: response};
 });
