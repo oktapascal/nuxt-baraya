@@ -23,7 +23,7 @@ export class AuthServices implements IAuthServices {
             if (!checkUsernameExists) {
                 this.errors.set("username", {message: "Username sudah terdaftar"});
                 throw createError({
-                    statusCode: 402,
+                    statusCode: 422,
                     statusMessage: "Unprocessable Entity",
                     data: JSON.stringify(Object.fromEntries(this.errors)),
                 });
@@ -62,7 +62,7 @@ export class AuthServices implements IAuthServices {
             if (user === null) {
                 this.errors.set("username", {message: "Username tidak terdaftar"});
                 throw createError({
-                    statusCode: 402,
+                    statusCode: 422,
                     statusMessage: "Unprocessable Entity",
                     data: JSON.stringify(Object.fromEntries(this.errors)),
                 });
@@ -74,7 +74,7 @@ export class AuthServices implements IAuthServices {
             if (!comparePassword) {
                 this.errors.set("password", {message: "Password tidak sesuai"});
                 throw createError({
-                    statusCode: 402,
+                    statusCode: 422,
                     statusMessage: "Unprocessable Entity",
                     data: JSON.stringify(Object.fromEntries(this.errors)),
                 });

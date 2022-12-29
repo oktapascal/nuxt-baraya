@@ -39,6 +39,7 @@ export default defineNuxtConfig({
             autoprefixer: {},
         },
     },
+    ssr: false,
     typescript: {
         shim: false,
     },
